@@ -1,0 +1,54 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "question": "Translate into English: 'I work every day'.",
+      "answer": "I work every day"
+    },
+    {
+      "id": 2,
+      "question": "Insert the correct form: She (go) to school yesterday.",
+      "answer": "went"
+    },
+    {
+      "id": 3,
+      "question": "Put the verb in the correct tense: He (read) a book now.",
+      "answer": "is reading"
+    },
+    {
+      "id": 4,
+      "question": "Choose the modal verb: You (must/can) drive a car if you have a license.",
+      "answer": "can"
+    },
+    {
+      "id": 5,
+      "question": "Translate: If I had time, I would go to the cinema.",
+      "answer": "If I had time, I would go to the cinema."
+    },
+    {
+      "id": 6,
+      "question": "Change into passive voice: They built this house in 1990.",
+      "answer": "This house was built in 1990."
+    },
+    {
+      "id": 7,
+      "question": "Change into reported speech: He said, 'I am happy'.",
+      "answer": "He said that he was happy."
+    },
+    {
+      "id": 8,
+      "question": "Write the past simple forms: go, see, eat.",
+      "answer": "went, saw, ate"
+    },
+    {
+      "id": 9,
+      "question": "Translate: She usually gets up at 7 am.",
+      "answer": "She usually gets up at 7 am."
+    },
+    {
+      "id": 10,
+      "question": "Which word is the odd one out: always, yesterday, usually, sometimes?",
+      "answer": "yesterday (it is a Past Simple marker, the others are Present Simple markers)"
+    }
+  ]
+}

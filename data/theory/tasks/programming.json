@@ -1,0 +1,44 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "question": "Write Python code that outputs 'Hello, World!'.",
+      "answer": "print('Hello, World!')"
+    },
+    {
+      "id": 2,
+      "question": "What is the data type of the variable x = 3.14?",
+      "answer": "float"
+    },
+    {
+      "id": 3,
+      "question": "Create a list of numbers from 1 to 5 and print it.",
+      "answer": "print([1,2,3,4,5])"
+    },
+    {
+      "id": 4,
+      "question": "Write a function that takes two numbers and returns their sum.",
+      "answer": "def add(a,b): return a+b"
+    },
+    {
+      "id": 5,
+      "question": "How do you get the last element of a list lst?",
+      "answer": "lst[-1]"
+    },
+    {
+      "id": 6,
+      "question": "Write a for loop that prints numbers from 0 to 4.",
+      "answer": "for i in range(5): print(i)"
+    },
+    {
+      "id": 7,
+      "question": "What does the code print(2 ** 3) output?",
+      "answer": "8"
+    },
+    {
+      "id": 8,
+      "question": "How do you open the file 'data.txt' for reading?",
+      "answer": "with open('data.txt', 'r') as f:"
+    }
+  ]
+}

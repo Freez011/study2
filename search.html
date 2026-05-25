@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - Study Assistant</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard">
+        <div class="dashboard-header">
+            <a href="dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+            <h1>Search Theory</h1>
+            <div class="user-info">
+                <a href="profile.html" class="profile-link" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: var(--primary); display: flex; align-items: center; justify-content: center;">
+                        <img id="profile-avatar" src="" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        <i class="fas fa-user-circle" id="default-avatar" style="font-size: 40px; color: white;"></i>
+                    </div>
+                    <span id="username"></span>
+                </a>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Enter a topic...">
+                <button id="search-btn"><i class="fas fa-search"></i> Search</button>
+            </div>
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <span>© 2026 Study Assistant</span>
+            <span>📞 +7 (933) 234-50-04</span>
+            <a href="https://t.me/freezqwx" target="_blank" class="telegram-link">
+                <i class="fab fa-telegram-plane"></i> @freezqwx
+            </a>
+        </div>
+    </footer>
+
+    <script src="js/apply-theme.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/search.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                const profileData = JSON.parse(localStorage.getItem(`profile_${currentUser}`)) || {};
+                const usernameSpan = document.getElementById('username');
+                usernameSpan.innerText = (profileData.firstName || profileData.lastName) ? `${profileData.firstName || ''} ${profileData.lastName || ''}`.trim() : currentUser;
+                const avatarImg = document.getElementById('profile-avatar');
+                const defaultIcon = document.getElementById('default-avatar');
+                if (profileData.avatar) {
+                    avatarImg.src = profileData.avatar;
+                    avatarImg.style.display = 'block';
+                    defaultIcon.style.display = 'none';
+                } else {
+                    avatarImg.style.display = 'none';
+                    defaultIcon.style.display = 'block';
+                }
+            }
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

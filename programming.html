@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Programming - Study Assistant</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="dashboard-header">
+            <a href="dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+            <h1>Python Programming</h1>
+            <div class="user-info">
+                <a href="profile.html" class="profile-link" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: var(--primary); display: flex; align-items: center; justify-content: center;">
+                        <img id="profile-avatar" src="" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        <i class="fas fa-user-circle" id="default-avatar" style="font-size: 40px; color: white;"></i>
+                    </div>
+                    <span id="username"></span>
+                </a>
+                <button id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <div class="topic-container">
+            <div class="topic-section">
+                <h3><i class="fas fa-book-open"></i> Theory</h3>
+                <div id="theory-list"></div>
+            </div>
+
+            <div class="topic-section">
+                <h3><i class="fas fa-pencil-alt"></i> Practice</h3>
+                <div id="practice-area">
+                    <p id="task-question">Click "New Task"</p>
+                    <input type="text" id="task-answer" placeholder="Your answer (code or result)">
+                    <div class="practice-buttons">
+                        <button id="check-task" class="btn-ripple">Check</button>
+                        <button id="new-task" class="btn-ripple">New Task</button>
+                    </div>
+                    <div id="task-result"></div>
+                </div>
+            </div>
+
+            <div class="topic-section compiler-icon-section">
+                <h3><i class="fab fa-python"></i> Python Compiler</h3>
+                <div class="compiler-icon" id="open-compiler">
+                    <i class="fab fa-python fa-3x"></i>
+                    <p>Click to open compiler</p>
+                </div>
+            </div>
+
+            <div id="compiler-modal" class="compiler-modal">
+                <div class="compiler-content">
+                    <div class="compiler-header">
+                        <h3><i class="fab fa-python"></i> Python Compiler</h3>
+                        <button class="close-compiler">&times;</button>
+                    </div>
+                    <div class="compiler-body">
+                        <div class="compiler-editor">
+                            <textarea id="python-code" class="python-editor" placeholder="Enter Python code...">print("Hello, World!")</textarea>
+                        </div>
+                        <div class="compiler-controls">
+                            <button id="run-python" class="btn-ripple" disabled>🚀 Run</button>
+                            <span id="compiler-status" class="compiler-status"></span>
+                        </div>
+                        <div class="compiler-output">
+                            <pre id="python-output" class="python-output">Program output will appear here...</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <span>© 2026 Study Assistant</span>
+            <span>📞 +7 (933) 234-50-04</span>
+            <a href="https://t.me/freezqwx" target="_blank" class="telegram-link">
+                <i class="fab fa-telegram-plane"></i> @freezqwx
+            </a>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script>
+        tippy('[data-tippy-content]', { theme: 'light', arrow: true });
+    </script>
+    <script src="js/apply-theme.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/favorites.js"></script>
+    <script src="js/pyodide-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) { window.location.href = 'index.html'; return; }
+            const profileData = JSON.parse(localStorage.getItem(`profile_${currentUser}`)) || {};
+            document.getElementById('username').innerText = (profileData.firstName || profileData.lastName) ? `${profileData.firstName || ''} ${profileData.lastName || ''}`.trim() : currentUser;
+            const avatarImg = document.getElementById('profile-avatar');
+            const defaultIcon = document.getElementById('default-avatar');
+            if (profileData.avatar) {
+                avatarImg.src = profileData.avatar;
+                avatarImg.style.display = 'block';
+                defaultIcon.style.display = 'none';
+            } else {
+                avatarImg.style.display = 'none';
+                defaultIcon.style.display = 'block';
+            }
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            });
+
+            fetch('data/theory/programming.json')
+                .then(response => response.json())
+                .then(data => {
+                    const theoryList = document.getElementById('theory-list');
+                    theoryList.innerHTML = data.topics.map((topic, index) => `
+                        <div class="theory-item" data-index="${index}">
+                            <div class="theory-header">
+                                <h4>${topic.title}</h4>
+                                <button class="favorite-btn" data-section="programming" data-title="${topic.title}" data-content="${topic.content}" data-sectionname="Programming">
+                                    <i class="far fa-star"></i>
+                                </button>
+                            </div>
+                            <div class="theory-content" style="display: none;">
+                                <p>${topic.content}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                    document.querySelectorAll('.theory-header').forEach(header => {
+                        header.addEventListener('click', function(e) {
+                            if (e.target.closest('.favorite-btn')) return;
+                            const theoryItem = this.closest('.theory-item');
+                            const content = theoryItem.querySelector('.theory-content');
+                            content.style.display = content.style.display === 'block' ? 'none' : 'block';
+                        });
+                    });
+                    document.querySelectorAll('.favorite-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const section = btn.dataset.section;
+                            const title = btn.dataset.title;
+                            const content = btn.dataset.content;
+                            const sectionName = btn.dataset.sectionname;
+                            addFavorite(section, title, content, sectionName);
+                            btn.innerHTML = '<i class="fas fa-star"></i>';
+                        });
+                    });
+                }).catch(error => console.error('Error loading theory:', error));
+
+            let tasks = [];
+            let currentTask = null;
+            fetch('data/tasks/programming.json')
+                .then(response => response.json())
+                .then(data => {
+                    tasks = data.tasks;
+                    newTask();
+                }).catch(error => console.error('Error loading tasks:', error));
+
+            function newTask() {
+                if (tasks.length === 0) return;
+                const randomIndex = Math.floor(Math.random() * tasks.length);
+                currentTask = tasks[randomIndex];
+                document.getElementById('task-question').textContent = currentTask.question;
+                document.getElementById('task-answer').value = '';
+                document.getElementById('task-result').textContent = '';
+            }
+            document.getElementById('new-task').addEventListener('click', newTask);
+            document.getElementById('check-task').addEventListener('click', () => {
+                const userAnswer = document.getElementById('task-answer').value.trim().toLowerCase();
+                if (!currentTask) return;
+                if (userAnswer === currentTask.answer.toLowerCase()) {
+                    document.getElementById('task-result').textContent = '✅ Correct!';
+                } else {
+                    document.getElementById('task-result').textContent = '❌ Wrong.';
+                }
+            });
+
+            // Compiler logic
+            const modal = document.getElementById('compiler-modal');
+            const openBtn = document.getElementById('open-compiler');
+            const closeBtn = document.querySelector('.close-compiler');
+            const runBtn = document.getElementById('run-python');
+            const codeArea = document.getElementById('python-code');
+            const outputArea = document.getElementById('python-output');
+            const statusSpan = document.getElementById('compiler-status');
+            let pyodideReady = false;
+            let pyodide;
+            async function loadPyodideAndRun() {
+                statusSpan.textContent = '⏳ Loading Python...';
+                runBtn.disabled = true;
+                try {
+                    pyodide = await loadPyodide({ indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/' });
+                    pyodideReady = true;
+                    runBtn.disabled = false;
+                    statusSpan.textContent = '✅ Python loaded';
+                } catch (err) {
+                    statusSpan.textContent = '❌ Load error';
+                    console.error(err);
+                }
+            }
+            openBtn.addEventListener('click', async () => {
+                modal.classList.add('active');
+                if (!pyodideReady) await loadPyodideAndRun();
+            });
+            closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+            window.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+            runBtn.addEventListener('click', async () => {
+                if (!pyodideReady) { outputArea.textContent = '⏳ Python still loading...'; return; }
+                const code = codeArea.value;
+                outputArea.textContent = '⏳ Running...';
+                try {
+                    pyodide.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+                    `);
+                    await pyodide.runPythonAsync(code);
+                    const output = pyodide.runPython('sys.stdout.getvalue()');
+                    outputArea.textContent = output || '✅ Code executed (no output)';
+                } catch (err) {
+                    outputArea.textContent = '❌ Error: ' + err.message;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

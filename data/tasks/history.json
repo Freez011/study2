@@ -1,0 +1,54 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "question": "In what year did the Baptism of Rus' take place?",
+      "answer": "988"
+    },
+    {
+      "id": 2,
+      "question": "Who was the first Tsar of all Rus'?",
+      "answer": "Ivan IV the Terrible"
+    },
+    {
+      "id": 3,
+      "question": "When was the Battle of Kulikovo?",
+      "answer": "1380"
+    },
+    {
+      "id": 4,
+      "question": "Which document legally enserfed the peasants in 1649?",
+      "answer": "Sobornoye Ulozhenie"
+    },
+    {
+      "id": 5,
+      "question": "Who founded Saint Petersburg?",
+      "answer": "Peter I the Great"
+    },
+    {
+      "id": 6,
+      "question": "In what year was the Patriotic War against Napoleon?",
+      "answer": "1812"
+    },
+    {
+      "id": 7,
+      "question": "State the year of the abolition of serfdom.",
+      "answer": "1861"
+    },
+    {
+      "id": 8,
+      "question": "Who was the last Russian emperor?",
+      "answer": "Nicholas II"
+    },
+    {
+      "id": 9,
+      "question": "When did the Great Patriotic War begin?",
+      "answer": "1941"
+    },
+    {
+      "id": 10,
+      "question": "In what year did the USSR collapse?",
+      "answer": "1991"
+    }
+  ]
+}
