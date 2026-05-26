@@ -73,7 +73,7 @@
         </div>
     </div>
 
-    <!-- Feedback widget (optional, text in English) -->
+    <!-- Feedback widget -->
     <div class="feedback-widget">
         <div class="feedback-toggle" id="feedbackToggle">
             <i class="fas fa-comment"></i>
@@ -96,7 +96,9 @@
                     <label for="message"><i class="fas fa-comment"></i> Message</label>
                     <textarea id="message" class="feedback-input" rows="4" required></textarea>
                 </div>
-                <button type="submit" class="btn-primary btn-ripple"><i class="fab fa-telegram-plane"></i> Send</button>
+                <button type="submit" id="submitBtn" class="btn-primary btn-ripple">
+                    <i class="fab fa-telegram-plane"></i> Send
+                </button>
             </form>
         </div>
     </div>
@@ -116,7 +118,7 @@
     <script src="js/apply-theme.js"></script>
     <script src="js/auth.js"></script>
     <script>
-        // Dashboard specific code (same as before but with English alerts)
+        // Dashboard specific code
         const currentUser = localStorage.getItem('currentUser');
         if (!currentUser) window.location.href = 'index.html';
         const profileData = JSON.parse(localStorage.getItem(`profile_${currentUser}`)) || {};
@@ -135,7 +137,8 @@
             localStorage.removeItem('currentUser');
             window.location.href = 'index.html';
         });
-        // Feedback widget logic with English messages
+
+        // Feedback widget logic
         const TELEGRAM_LINK = 'https://t.me/freezqwx';
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
