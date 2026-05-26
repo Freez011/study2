@@ -40,13 +40,16 @@ function displayResults(results) {
         container.innerHTML = '<p>Nothing found</p>';
         return;
     }
-    container.innerHTML = results.map(topic => `
+    container.innerHTML = results.map(topic => {
+        const preview = stripHTML(topic.content).slice(0, 200);
+        return `
         <div class="result-card">
-            <h4>${topic.title}</h4>
-            <p>${topic.content.substring(0, 200)}...</p>
-            <div class="result-meta">Section: ${topic.sectionName}</div>
+            <h4>${escapeHTML(topic.title)}</h4>
+            <p>${escapeHTML(preview)}${preview.length === 200 ? '...' : ''}</p>
+            <div class="result-meta">Section: ${escapeHTML(topic.sectionName)}</div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

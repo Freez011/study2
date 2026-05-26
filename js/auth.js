@@ -1,23 +1,31 @@
 async function hashPassword(password) {
-    const msgBuffer = new TextEncoder().encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
+    if (globalThis.crypto?.subtle) {
+        const msgBuffer = new TextEncoder().encode(password);
+        const hashBuffer = await globalThis.crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    let hash = 2166136261;
+    for (let i = 0; i < password.length; i += 1) {
+        hash ^= password.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+    }
+    return `fallback-${(hash >>> 0).toString(16)}`;
 }
 
 function getUsers() {
-    return JSON.parse(localStorage.getItem('users')) || [];
+    return getStoredJSON('users', []);
 }
 
 function saveUsers(users) {
-    localStorage.setItem('users', JSON.stringify(users));
+    setStoredJSON('users', users);
 }
 
 function checkAuth() {
     const currentUser = localStorage.getItem('currentUser');
     const publicPages = ['index.html'];
-    const currentPage = window.location.pathname.split('/').pop();
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     if (!publicPages.includes(currentPage) && !currentUser) {
         window.location.href = 'index.html';
     }

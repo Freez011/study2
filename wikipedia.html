@@ -45,6 +45,8 @@
     </footer>
 
     <script src="js/apply-theme.js"></script>
+
+    <script src="js/common.js"></script>
     <script src="js/auth.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -53,7 +55,7 @@
                 window.location.href = 'index.html';
                 return;
             }
-            const profileData = JSON.parse(localStorage.getItem(`profile_${currentUser}`)) || {};
+            const profileData = getStoredJSON(`profile_${currentUser}`, {});
             const usernameSpan = document.getElementById('username');
             if (profileData.firstName || profileData.lastName) {
                 usernameSpan.textContent = `${profileData.firstName || ''} ${profileData.lastName || ''}`.trim();
@@ -102,11 +104,12 @@
                     const data = await response.json();
                     let html = `
                         <div class="result-card">
-                            <h4>${data.title || 'No title'}</h4>
-                            <p>${data.extract || 'No description'}</p>
+                            <h4>${escapeHTML(data.title || 'No title')}</h4>
+                            <p>${escapeHTML(data.extract || 'No description')}</p>
                     `;
                     if (data.content_urls?.desktop?.page) {
-                        html += `<p><a href="${data.content_urls.desktop.page}" target="_blank" rel="noopener noreferrer" style="color: var(--primary);">Read full article on Wikipedia →</a></p>`;
+                        const articleUrl = encodeURI(data.content_urls.desktop.page);
+                        html += `<p><a href="${articleUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--primary);">Read full article on Wikipedia →</a></p>`;
                     }
                     html += '</div>';
                     resultsDiv.innerHTML = html;

@@ -78,11 +78,16 @@ async function displayGallery() {
         images.sort((a, b) => b.timestamp - a.timestamp);
         gallery.innerHTML = images.map(img => `
             <div class="gallery-item" data-id="${img.id}">
-                <img src="${img.dataUrl}" alt="${img.name}" onclick="openModal('${img.dataUrl}', '${img.caption}')">
-                <div class="caption">${img.caption}</div>
-                <button class="delete-btn" onclick="deleteImageHandler(event, ${img.id})"><i class="fas fa-trash"></i></button>
+                <img src="${img.dataUrl}" alt="${escapeHTML(img.name)}">
+                <div class="caption">${escapeHTML(img.caption)}</div>
+                <button class="delete-btn" type="button" aria-label="Delete note"><i class="fas fa-trash"></i></button>
             </div>
         `).join('');
+
+        gallery.querySelectorAll('.gallery-item').forEach((item, index) => {
+            item.addEventListener('click', () => openModal(images[index].dataUrl, images[index].caption));
+            item.querySelector('.delete-btn').addEventListener('click', (event) => deleteImageHandler(event, images[index].id));
+        });
     } catch (error) {
         gallery.innerHTML = '<p>Error loading notes.</p>';
         console.error(error);

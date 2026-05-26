@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const storageKey = `profile_${currentUser}`;
-    let profileData = JSON.parse(localStorage.getItem(storageKey)) || {};
+    let profileData = getStoredJSON(storageKey, {});
 
     const avatarPreview = document.getElementById('profile-avatar-preview');
     const firstNameInput = document.getElementById('first-name');
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             avatar: avatarPreview.src || '',
             theme: themeSelect.value
         };
-        localStorage.setItem(storageKey, JSON.stringify(newProfile));
+        setStoredJSON(storageKey, newProfile);
         localStorage.setItem('theme', themeSelect.value);
         alert('✅ Profile saved!');
         window.location.href = 'dashboard.html';

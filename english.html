@@ -57,13 +57,15 @@
     </footer>
 
     <script src="js/apply-theme.js"></script>
+
+    <script src="js/common.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/favorites.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const currentUser = localStorage.getItem('currentUser');
             if (!currentUser) { window.location.href = 'index.html'; return; }
-            const profileData = JSON.parse(localStorage.getItem(`profile_${currentUser}`)) || {};
+            const profileData = getStoredJSON(`profile_${currentUser}`, {});
             document.getElementById('username').innerText = (profileData.firstName || profileData.lastName) ? `${profileData.firstName || ''} ${profileData.lastName || ''}`.trim() : currentUser;
             const avatarImg = document.getElementById('profile-avatar');
             const defaultIcon = document.getElementById('default-avatar');
@@ -87,13 +89,13 @@
                     theoryList.innerHTML = data.topics.map((topic, index) => `
                         <div class="theory-item" data-index="${index}">
                             <div class="theory-header">
-                                <h4>${topic.title}</h4>
-                                <button class="favorite-btn" data-section="english" data-title="${topic.title}" data-content="${topic.content}" data-sectionname="English Language">
+                                <h4>${escapeHTML(topic.title)}</h4>
+                                <button class="favorite-btn" data-index="${index}" aria-label="Add to favorites">
                                     <i class="far fa-star"></i>
                                 </button>
                             </div>
                             <div class="theory-content" style="display: none;">
-                                <p>${topic.content}</p>
+                                ${topic.content}
                             </div>
                         </div>
                     `).join('');
@@ -109,11 +111,8 @@
                         btn.addEventListener('click', (e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            const section = btn.dataset.section;
-                            const title = btn.dataset.title;
-                            const content = btn.dataset.content;
-                            const sectionName = btn.dataset.sectionname;
-                            addFavorite(section, title, content, sectionName);
+                            const topic = data.topics[Number(btn.dataset.index)];
+                            addFavorite('english', topic.title, topic.content, 'English Language');
                             btn.innerHTML = '<i class="fas fa-star"></i>';
                         });
                     });

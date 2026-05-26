@@ -116,12 +116,14 @@
     </footer>
 
     <script src="js/apply-theme.js"></script>
+
+    <script src="js/common.js"></script>
     <script src="js/auth.js"></script>
     <script>
         // Dashboard specific code
         const currentUser = localStorage.getItem('currentUser');
         if (!currentUser) window.location.href = 'index.html';
-        const profileData = JSON.parse(localStorage.getItem(`profile_${currentUser}`)) || {};
+        const profileData = getStoredJSON(`profile_${currentUser}`, {});
         document.getElementById('username').innerText = (profileData.firstName || profileData.lastName) ? `${profileData.firstName || ''} ${profileData.lastName || ''}`.trim() : currentUser;
         const avatarImg = document.getElementById('profile-avatar');
         const defaultIcon = document.getElementById('default-avatar');
